@@ -28,5 +28,16 @@
 
 5. Run the app
    ```bash
-   uvicorn test2:app --reload
+   uvicorn main_api:app --reload
+   ```
+
+####Dockerising the APi
+
+1. Build the api image
+   ```bash
+   docker-compose build
+   ```
+2. Deploy the app
+      ```bash
+   docker-compose up
    ```
