@@ -3,9 +3,9 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+import os
 
-
-DATABASE_URL = "mysql+mysqlconnector://user:test123@localhost/request_db" 
+DATABASE_URL = os.getenv("DATABASE_URL","mysql+mysqlconnector://user:test123@localhost/request_db")
 
 
 engine = create_engine(DATABASE_URL)

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      sqdb:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=mysql+mysqlconnector://root:root@sqdb/request_db
+    networks:
+      - api-network
+
+  sqdb:
+    image: mysql:8.0.40
+    container_name: app-db
+    restart: always
+    hostname: sqdb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: request_db
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - api-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 20s
+      retries: 20
+      start_period: 10s
+      timeout: 5s
+
+networks:
+  api-network:
+    driver: bridge
+
+volumes:
+  db_data:
