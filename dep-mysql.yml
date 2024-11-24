@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sqdb-statefulset
+  namespace: fastapi-app-namespace
+spec:
+  serviceName: "sqdb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqdb
+  template:
+    metadata:
+      labels:
+        app: sqdb
+    spec:
+      containers:
+        - name: sqdb
+          image: mysql:8.0.40
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "request_db"
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: vol-mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: vol-mysql
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: standard
