@@ -38,6 +38,41 @@
    docker-compose build
    ```
 2. Deploy the app
-      ```bash
+   ```bash
    docker-compose up
    ```
+
+####Deloying on minikube
+
+Prerequisites:
+- minikube
+- kubectl
+
+1. Start minikube with docker driver
+   ```bash
+   minikube start --driver=docker
+   ```
+
+2. Point docker cli to minikube's docker daemon
+   ```bash
+   eval $(minikube docker-env)
+   ```
+  
+3. Build the image
+   ```bash
+   docker build -t fast_api_py_app:latest .
+   ```
+     
+5. Deploy all manifest file with kubectl
+
+6.  For ingress setup enbale nginx addon for minikube
+   ```bash
+   minikube addons enable ingress
+   ```
+
+7. Apply the ingress manifest and test api as:
+   ```bash
+   curl http://192.168.49.2.nip.io/count
+   ```
+
+
